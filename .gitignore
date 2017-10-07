@@ -1,6 +1,6 @@
-#.gitignore
-#.gulpfile.js
-#gulp.config.json
+.gitignore
+.gulpfile.js
+gulp.config.json
 node_modules
 dist
 
