@@ -1,0 +1,14 @@
+$colors: (
+    default: (
+        
+    )
+);
+
+@function getColor($name, $alpha:1, $theme:default) {
+    $themeMap: map-get($colors, $theme);
+    @if map-has-key($themeMap, $name){
+		@return rgba(map-get($themeMap, $name), $alpha);
+	}
+	@warn "Unkown '#{$name}' in $colors at _variables.colors.scss";
+	@return null;
+}

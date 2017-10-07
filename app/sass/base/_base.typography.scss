@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600,600i,700,700i,800,800i&subset=latin-ext');
+
+@mixin font-family($name, $style:normal, $size:null, $important: !important) {
+    
+    @if($name == "regular"){
+        font-family: 'Open Sans', sans-serif $important;
+        font-weight: 400;
+    }
+
+    @if($name == "medium"){
+        font-family: 'Open Sans', sans-serif $important;
+        font-weight: 500;
+    }
+
+    @if($name == "semi-bold"){
+        font-family: 'Open Sans', sans-serif $important;
+        font-weight: 600;
+    }
+
+    @if($name == "semi"){
+        font-family: 'Open Sans', sans-serif $important;
+        font-weight: 600;
+    }
+
+    @if($name == "bold"){
+        font-family: 'Open Sans', sans-serif $important;
+        font-weight: 700;
+    }
+
+    @if($name == "black"){
+        font-family: 'Open Sans', sans-serif $important;
+        font-weight: 800;
+    }
+    @if($style) { 
+        font-style: $style $important; 
+    }@else{
+        font-style: normal; 
+    }
+    @if($size) {
+        font-size: $size $important;
+    }
+}
