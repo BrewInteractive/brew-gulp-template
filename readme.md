@@ -1,4 +1,4 @@
-## Brwww Gulp Template 1.0
+## Brew Gulp Template 1.0
 
 # Kurulum
 Gerekli paketler kurmak için aşağıdaki komut çalıştırılır.
