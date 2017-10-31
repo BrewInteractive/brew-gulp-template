@@ -1,30 +1,44 @@
 'use strict';
 
 var fs = require('fs');
-var config = JSON.parse(fs.readFileSync('./gulp.config.json'));
 
 //config
-var browserSyncOptions = config.browserSyncOptions;
-var sourcePath = config.source["path"];
-var sourceImagePath = config.source["images-path"];
-var sourceFontPath = config.source["fonts-path"];
-var sourceJsPath = config.source["js-path"];
-var sourceSassPath = config.source["sass-path"];
-var sourceVendorCssPath = config.source["vendor-css-path"];
-var sourceVendorCssFile = config.source["vendor-css-file"];
-var sourceSassFile = config.source["sass-file"];
-var sourceVendorScripts = config.source["vendor-scripts"];
-var sourceBundleScripts = config.source["bundle-scripts"];
-var distPath = config.dist["path"];
-var distJsPath = distPath + config.dist["js-path"];
-var distCssPath = distPath + config.dist["css-path"];
-var distImagePath = distPath + config.dist["images-path"];
-var distFontPath = distPath + config.dist["fonts-path"];
-var distVendorCssName = config.dist["vendor-css-name"];
-var distVendorJsName = config.dist["vendor-js-name"];
-var distBundleCssName = config.dist["bundle-css-name"];
-var distBundleJsName = config.dist["bundle-js-name"];
-
+var config = {
+    browserSyncOptions: {
+        server: {
+            baseDir: "./dist"
+        }
+    },
+    source: {
+        path: "./app/",
+        jsPath: "./app/scripts/",
+        vendorCssPath: "./app/css/",
+        sassPath: "./app/sass/",
+        imagesPath: "./app/images/",
+        fontsPath: "./app/fonts/",
+        vendorCssFiles: [
+            "./app/css/vendor.css",
+        ],
+        sassFile: "./app/sass/main.scss",
+        vendorScripts: [
+            "node_modules/zepto/dist/zepto.min.js"
+        ],
+        bundleScripts: [
+            "app/scripts/main.js"
+        ]
+    },
+    dist: {
+        path: "./dist/",
+        jsPath: "assets",
+        cssPath: "assets",
+        imagesPath: "assets/images",
+        fontsPath: "assets/fonts",
+        vendorCssName: "vendor.min.css",
+        vendorJsName: "vendor.min.js",
+        bundleCssName: "bundle.min.css",
+        bundleJsName: "bundle.min.js"
+    }
+}
 //libs
 var gulp = require('gulp');
 var sass = require('gulp-sass');
@@ -42,61 +56,61 @@ var browserSync = require('browser-sync').create();
 //tasks
 
 gulp.task('html', function(){
-    gulp.src(sourcePath + '*.html')
-        .pipe(gulp.dest(distPath));
+    gulp.src(config.source.path + '*.html')
+        .pipe(gulp.dest(config.dist.path));
 });
 
 gulp.task('image', function(){
-    gulp.src(sourceImagePath + '/**/*')
+    gulp.src(config.source.imagesPath + '**/*')
         .pipe(image())
-        .pipe(gulp.dest(distImagePath));
+        .pipe(gulp.dest(config.dist.path + config.dist.imagesPath));
 });
 
 gulp.task('font', function(){
-    gulp.src(sourceFontPath + '/**/*')
-        .pipe(gulp.dest(distFontPath));
+    gulp.src(config.source.fontsPath + '**/*')
+        .pipe(gulp.dest(config.dist.path + config.dist.fontsPath));
 });
 
 gulp.task('vendor-css', function () {
-    return gulp.src(sourceVendorCssFile)
+    return gulp.src(config.source.vendorCssFiles)
         .pipe(sass.sync().on('error', sass.logError))
         .pipe(cleanCSS({compatibility: 'ie8'}))
         .pipe(postcss([autoprefixer({ browsers: ['last 3 versions'] })]))
-        .pipe(rename(distVendorCssName))
-        .pipe(gulp.dest(distCssPath))
+        .pipe(rename(config.dist.vendorCssName))
+        .pipe(gulp.dest(config.dist.path + config.dist.cssPath))
         .pipe(browserSync.stream({match: '**/*.css'}));
 });
 
 gulp.task('sass', function () {
-    return gulp.src(sourceSassFile)
+    return gulp.src(config.source.sassFile)
         .pipe(sass.sync().on('error', sass.logError))
         .pipe(cleanCSS({compatibility: 'ie8'}))
         .pipe(postcss([autoprefixer({ browsers: ['last 3 versions'] })]))
-        .pipe(rename(distBundleCssName))
-        .pipe(gulp.dest(distCssPath))
+        .pipe(rename(config.dist.bundleCssName))
+        .pipe(gulp.dest(config.dist.path + config.dist.cssPath))
         .pipe(browserSync.stream({match: '**/*.css'}));
 });
 
 gulp.task('vendor-js', function() {
-    return gulp.src(sourceVendorScripts)
-        .pipe(concat(distVendorJsName))
+    return gulp.src(config.source.vendorScripts)
+        .pipe(concat(config.dist.vendorJsName))
         .pipe(uglify())
-        .pipe(gulp.dest(distJsPath))
+        .pipe(gulp.dest(config.dist.path + config.dist.jsPath))
         .pipe(browserSync.stream({match: '**/*.js'}));
 });
 
 gulp.task('bundle-js', function() {
-    return gulp.src(sourceBundleScripts)
-        .pipe(concat(distBundleJsName))
+    return gulp.src(config.source.bundleScripts)
+        .pipe(concat(config.dist.bundleJsName))
         .pipe(uglify())
-        .pipe(gulp.dest(distJsPath))
+        .pipe(gulp.dest(config.dist.path + config.dist.jsPath))
         .pipe(browserSync.stream({match: '**/*.js'}));
 });
 
 gulp.task('serve', function () {
     // Serve files from the root of this project
-    browserSync.init(browserSyncOptions);
-    gulp.watch([sourcePath+'*.html', sourceVendorCssPath+'/**/*.css', sourceSassPath+'/**/*.scss', sourceJsPath+'/**/*.js'], ['html', 'css', 'js']).on('change', function(){
+    browserSync.init(config.browserSyncOptions);
+    gulp.watch([config.source.path+'*.html', config.source.vendorCssPath+'**/*.css', config.source.sassPath+'**/*.scss', config.source.jsPath+'**/*.js'], ['html', 'css', 'js']).on('change', function(){
         browserSync.reload({stream: true});
     });
 });
