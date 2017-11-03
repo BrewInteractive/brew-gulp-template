@@ -39,8 +39,9 @@ var config = {
         bundleJsName: "bundle.min.js"
     }
 }
-//libs
 var gulp = require('gulp');
+var runSequence = require('run-sequence');
+var clean = require('gulp-clean');
 var sass = require('gulp-sass');
 var uglify = require('gulp-uglify');
 var pump = require('pump');
@@ -54,29 +55,34 @@ var autoprefixer = require('autoprefixer');
 var browserSync = require('browser-sync').create();
 
 //tasks
-
 gulp.task('html', function(){
     gulp.src(config.source.path + '*.html')
         .pipe(gulp.dest(config.dist.path));
 });
 
 gulp.task('image', function(){
+    gulp.src(config.dist.path + config.dist.imagesPath + '**/*')
+        .pipe(clean({read: false, force: true}));
+
     gulp.src(config.source.imagesPath + '**/*')
         .pipe(image())
         .pipe(gulp.dest(config.dist.path + config.dist.imagesPath));
 });
 
 gulp.task('font', function(){
+    gulp.src(config.dist.path + config.dist.fontsPath + '**/*')
+        .pipe(clean({read: false, force: true}));
+
     gulp.src(config.source.fontsPath + '**/*')
         .pipe(gulp.dest(config.dist.path + config.dist.fontsPath));
 });
 
 gulp.task('vendor-css', function () {
     return gulp.src(config.source.vendorCssFiles)
+        .pipe(concat(config.dist.vendorCssName))
         .pipe(sass.sync().on('error', sass.logError))
         .pipe(cleanCSS({compatibility: 'ie8'}))
         .pipe(postcss([autoprefixer({ browsers: ['last 3 versions'] })]))
-        .pipe(rename(config.dist.vendorCssName))
         .pipe(gulp.dest(config.dist.path + config.dist.cssPath))
         .pipe(browserSync.stream({match: '**/*.css'}));
 });
@@ -115,6 +121,16 @@ gulp.task('serve', function () {
     });
 });
 
+gulp.task('clean', function() {
+    return gulp.src(config.dist.path)
+        .pipe(clean({read: false, force: true}));
+});
+
 gulp.task('css', ['vendor-css', 'sass']);
 gulp.task('js', ['vendor-js', 'bundle-js']);
-gulp.task('build', ['html', 'image', 'font', 'js', 'css']);
+gulp.task('build', function(callback) {
+    runSequence('clean',
+                ['image', 'font', 'js', 'css'],
+                'html',
+                callback);
+});
