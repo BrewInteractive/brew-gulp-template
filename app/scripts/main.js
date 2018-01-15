@@ -2,39 +2,57 @@
 
 	var BrewApp = function() {
 
-		var _appInstance;
+        var _appInstance;
+
+        this.settings = {
+            breakpoints: {
+                mp: {min: 0, max: 319, breakpointName: "miniphone", className: "phone"},
+                sp: {min: 320, max: 479, breakpointName: "smallphone", className: "phone"},
+                xs: {min: 480, max: 575, breakpointName: "extrasmall", className: "phone"},
+                sm: {min: 576, max: 767, breakpointName: "small", className: "phone"},
+                md: {min: 768, max: 991, breakpointName: "medium", className: "tablet"},
+                lg: {min: 992, max: 1199, breakpointName: "large", className: "desktop"},
+                xl: {min: 1200, max: 1365, breakpointName: "extralarge", className: "desktop"},
+                wd: {min: 1366, max: 1599, breakpointName: "widedisplay", className: "desktop"},
+                hd: {min: 1600, max: Infinity, breakpointName: "highdisplay", className: "desktop"}
+            },
+            breakpointClasses: ["phone", "tablet", "desktop"]
+        }
 		
 		function addListener() {
-			$(window).resize(function() {
-				var width = $(window).width();
-				var status = "desktop";
-				if(width <= 1024) status = "tablet";
-				if(width < 768) status = "mobile";
+            Breakpoints.on('change', function(){
+                setViewport(this.current, this.previous);
+            });
 
-				if(_appInstance.screenStatus != status) {
-                    //triggered once on status change
+			// $(window).resize(function() {
+                
+			// });
+        }
+        
+        function setViewport(currentBreakpoint, prevBreakpoint = null) {
+            var currentClass = _appInstance.settings.breakpoints[currentBreakpoint.name].className;
+            var prevClass = prevBreakpoint ? _appInstance.settings.breakpoints[prevBreakpoint.name].className : _appInstance.settings.breakpointClasses.join(" ");
+            $('body').removeClass(prevClass);
+            $('body').addClass(currentClass);
 
-				}else {
-                    _appInstance.screenStatus = status;
-                    //triggered on resize
-
-				}
-			});
-		}
+            // switch(currentClass) by body class name
+            // switch(currentBreakpoint.name) by breakpoint name
+        }
 		
 		this.init = function() {
 			_appInstance = this;
 
 			_.templateSettings.interpolate = /{([\s\S]+?)}/g;
-			_.templateSettings.escape = /{{([\s\S]+?)}}/g;
-
-			this.screenStatus = "desktop";
+            _.templateSettings.escape = /{{([\s\S]+?)}}/g;
+            
+            Breakpoints(this.settings.breakpoints);
+            setViewport(Breakpoints.current());
 
 			addListener();
 			setTimeout(function() {
 				$(window).trigger('resize');
 			}, 350);
-		};
+        };
 
 		this.router = {
 			navigate(url) {

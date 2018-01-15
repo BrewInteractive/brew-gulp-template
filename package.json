@@ -7,13 +7,14 @@
   "homepage": "http://brewww.com",
   "private": true,
   "dependencies": {
+    "breakpoints-js": "^1.0.5",
+    "gulp": "^3.9.1",
     "zepto": "^1.2.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.2.5",
     "browser-sync": "^2.23.5",
     "es6-promise": "^4.2.2",
-    "gulp": "^3.9.1",
     "gulp-clean": "^0.4.0",
     "gulp-clean-css": "^3.9.2",
     "gulp-concat": "^2.6.1",

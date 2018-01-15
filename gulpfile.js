@@ -23,6 +23,7 @@ var config = {
         vendorScripts: [
             "node_modules/es6-promise/dist/es6-promise.auto.min.js",
             "node_modules/lodash/lodash.min.js",
+            "node_modules/breakpoints-js/dist/breakpoints.min.js",
             "node_modules/zepto/dist/zepto.min.js"
         ],
         bundleScripts: [
