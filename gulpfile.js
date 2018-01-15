@@ -21,6 +21,8 @@ var config = {
         ],
         sassFile: "./app/sass/main.scss",
         vendorScripts: [
+            "node_modules/es6-promise/dist/es6-promise.auto.min.js",
+            "node_modules/lodash/lodash.min.js",
             "node_modules/zepto/dist/zepto.min.js"
         ],
         bundleScripts: [
@@ -39,11 +41,12 @@ var config = {
         bundleJsName: "bundle.min.js"
     }
 }
+
 var gulp = require('gulp');
 var runSequence = require('run-sequence');
 var clean = require('gulp-clean');
 var sass = require('gulp-sass');
-var uglify = require('gulp-uglify');
+var uglify = require('gulp-uglify-es').default;
 var pump = require('pump');
 var rename = require('gulp-rename');
 var concat = require('gulp-concat');
