@@ -1,0 +1,22 @@
+$grid-breakpoints: (
+    mp: 0,
+    sp: 320px,
+    xs: 480px,
+    sm: 575px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px,
+    wd: 1366px,
+    hd: 1600px
+) !default;
+
+$container-max-widths: (
+    sp: 320px,
+    xs: 480px,
+    sm: 575px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px,
+    wd: 1366px,
+    hd: 1600px
+) !default;
