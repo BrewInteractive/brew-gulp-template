@@ -43,7 +43,9 @@ var config = {
     }
 }
 
+require('babel-core/register');
 var gulp = require('gulp');
+var babel = require('gulp-babel');
 var runSequence = require('run-sequence');
 var clean = require('gulp-clean');
 var sass = require('gulp-sass');
@@ -111,6 +113,7 @@ gulp.task('vendor-js', function() {
 
 gulp.task('bundle-js', function() {
     return gulp.src(config.source.bundleScripts)
+        .pipe(babel())
         .pipe(concat(config.dist.bundleJsName))
         .pipe(uglify())
         .pipe(gulp.dest(config.dist.path + config.dist.jsPath))
