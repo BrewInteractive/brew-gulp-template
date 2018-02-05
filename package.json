@@ -8,14 +8,21 @@
   "private": true,
   "babel": {
     "presets": [
-        ["env", {
-            "targets": {
-                "browsers": ["last 2 versions"]
-            },
-            "debug": true
-        }]
+      [
+        "env",
+        {
+          "targets": {
+            "browsers": [
+              "last 2 versions"
+            ]
+          },
+          "debug": true
+        }
+      ]
     ],
-    "plugins": ["transform-object-assign"]
+    "plugins": [
+      "transform-object-assign"
+    ]
   },
   "dependencies": {
     "breakpoints-js": "^1.0.5",
@@ -24,10 +31,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.39",
-    "@babel/preset-env": "^7.0.0-beta.39",
-    "@babel/preset-es2015": "^7.0.0-beta.39",
     "autoprefixer": "^7.2.5",
     "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-assign": "^6.22.0",
     "babel-preset-env": "^1.6.1",
     "browser-sync": "^2.23.5",
     "es6-promise": "^4.2.2",
